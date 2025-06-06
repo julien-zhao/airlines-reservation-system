@@ -10,7 +10,15 @@
 
     <modules>
         <module>api-gateway</module>
+
+        <module>flight-service</module>
         <module>search-service</module>
+        <module>booking-service</module>
+        <module>checkin-service</module>
+        <module>client-service</module>
+        <module>discovery-service</module>
+        <module>inventory-service</module>
+
     </modules>
 
 </project>
