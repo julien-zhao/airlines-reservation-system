@@ -1,6 +1,7 @@
 package com.example.flightservice.service;
 
 import com.example.flightservice.entity.Flight;
+import com.example.flightservice.entity.Layover;
 import com.example.flightservice.repository.FlightRepository;
 import org.springframework.stereotype.Service;
 

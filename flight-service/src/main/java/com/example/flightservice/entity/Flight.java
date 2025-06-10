@@ -1,11 +1,15 @@
 package com.example.flightservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "flight")
 public class Flight {
@@ -51,6 +55,11 @@ public class Flight {
 
     @Column(name = "flight_full")
     private boolean flightFull;
+
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Layover> layovers = new ArrayList<>();
+
 
     public Long getId() {
         return id;
@@ -154,6 +163,14 @@ public class Flight {
 
     public void setFlightFull(boolean flightFull) {
         this.flightFull = flightFull;
+    }
+
+    public List<Layover> getLayovers() {
+        return layovers;
+    }
+
+    public void setLayovers(List<Layover> layovers) {
+        this.layovers = layovers;
     }
 }
 
