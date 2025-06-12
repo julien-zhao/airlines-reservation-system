@@ -1,7 +1,8 @@
 package com.example.clientservice.controller;
 
-import com.example.clientservice.model.Client;
+import com.example.clientservice.entity.Client;
 import com.example.clientservice.repository.ClientRepository;
+import com.example.clientservice.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,33 +10,31 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/clients")
+@RequestMapping("/api/clients")
 public class ClientController {
 
-    @Autowired
-    private ClientRepository repository;
+    private final ClientService clientService;
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;
+    }
 
-    // 添加客户
     @PostMapping
     public Client addClient(@RequestBody Client client) {
-        return repository.save(client);
+        return clientService.saveClient(client);
     }
 
-    // 获取所有客户
     @GetMapping
     public List<Client> getAllClients() {
-        return repository.findAll();
+        return clientService.getAllClient();
     }
 
-    // 获取单个客户
     @GetMapping("/{id}")
-    public Optional<Client> getClientById(@PathVariable Long id) {
-        return repository.findById(id);
+    public Client getClientById(@PathVariable Long id) {
+        return clientService.getClientById(id);
     }
 
-    // 删除客户
     @DeleteMapping("/{id}")
     public void deleteClient(@PathVariable Long id) {
-        repository.deleteById(id);
+        clientService.deleteClient(id);
     }
 }

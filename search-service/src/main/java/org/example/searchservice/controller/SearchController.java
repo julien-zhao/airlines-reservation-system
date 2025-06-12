@@ -41,9 +41,6 @@ public class SearchController {
             @RequestParam String departureTime,
             @RequestParam String arrivalTime) {
 
-        LocalDateTime depTime = LocalDateTime.parse(departureTime);
-        LocalDateTime arrTime = LocalDateTime.parse(arrivalTime);
-
         return flightServiceClient.searchFlights(
                 origin, destination, departureTime, arrivalTime
         );

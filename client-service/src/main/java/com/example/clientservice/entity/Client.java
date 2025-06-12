@@ -1,27 +1,26 @@
-package com.example.clientservice.model;
+package com.example.clientservice.entity;
 
 import javax.persistence.*;
 
 @Entity
+@Table(name = "client")
 public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
+
+    @Column(name = "passport_no", unique=true, nullable=false)
     private String passportNo;
-
-    public Client() {}
-
-    public Client(String name, String email, String phoneNumber, String passportNo) {
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.passportNo = passportNo;
-    }
 
     public Long getId() {
         return id;
