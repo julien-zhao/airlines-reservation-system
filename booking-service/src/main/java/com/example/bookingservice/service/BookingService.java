@@ -45,12 +45,14 @@ public class BookingService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
         }
 
-
+        if(payment.getPrice() != flightServiceClient.getFlight(flightId).getPrice()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "price is not correct");
+        }
         payment.setUserId(userId);
         paymentServiceClient.save(payment);
 
         int available = flightServiceClient.getAvailableSeats(flightId);
-        int passengerCount = passengers.size();
+        int passengerCount = passengers.size()+1;
         if (available < passengerCount) {
             throw new RuntimeException("Not enough seats available");
         }

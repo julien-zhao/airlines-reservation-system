@@ -26,60 +26,64 @@ public class FlightController {
     }
 
     @GetMapping
-    public List<Flight> getAllFlights() {
-        return flightService.getAllFlights();
+    public ResponseEntity<?> getAllFlights() {
+        List<Flight> flights = flightService.getAllFlights();
+        return ResponseEntity.ok(flights);
     }
 
     @GetMapping("/{id}")
-    public Flight getFlightById(@PathVariable Long id) {
-        return flightService.getFlightById(id);
+    public ResponseEntity<?> getFlightById(@PathVariable Long id) {
+        Flight flight = flightService.getFlightById(id);
+        return ResponseEntity.ok(flight);
     }
 
     @GetMapping("/searchByOrigin")
-    public List<Flight> getFlightsByOrigin(@RequestParam String origin) {
-        return flightService.getFlightsByOrigin(origin);
+    public ResponseEntity<?> getFlightsByOrigin(@RequestParam String origin) {
+        List<Flight> flights = flightService.getFlightsByOrigin(origin);
+        return ResponseEntity.ok(flights);
     }
 
     @GetMapping("/searchByDestination")
-    public List<Flight> getFlightsByDestination(@RequestParam String destination) {
-        return flightService.getFlightsByDestination(destination);
+    public ResponseEntity<?> getFlightsByDestination(@RequestParam String destination) {
+        List<Flight> flights = flightService.getFlightsByDestination(destination);
+        return ResponseEntity.ok(flights);
     }
 
     @GetMapping("/searchByOriginAndDestination")
-    public List<Flight> getFlightsByOriginAndDestination(@RequestParam String origin,
-                                                         @RequestParam String destination) {
-        return flightService.getFlightsByOriginAndDestination(origin, destination);
+    public ResponseEntity<?> getFlightsByOriginAndDestination(@RequestParam String origin,
+                                                              @RequestParam String destination) {
+        List<Flight> flights = flightService.getFlightsByOriginAndDestination(origin, destination);
+        return ResponseEntity.ok(flights);
     }
 
     @GetMapping("/search")
-    public List<Flight> searchFlights(@RequestParam String origin,
-                                      @RequestParam String destination,
-                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departureTime,
-                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arrivalTime) {
-        return flightService.searchFlights(origin, destination, departureTime, arrivalTime);
+    public ResponseEntity<?> searchFlights(@RequestParam String origin,
+                                           @RequestParam String destination,
+                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departureTime,
+                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arrivalTime) {
+        List<Flight> flights = flightService.searchFlights(origin, destination, departureTime, arrivalTime);
+        return ResponseEntity.ok(flights);
     }
 
     @GetMapping("/{flightId}/availability")
-    public ResponseEntity<Integer> getAvailableSeats(@PathVariable Long flightId) {
+    public ResponseEntity<?> getAvailableSeats(@PathVariable Long flightId) {
         Flight flight = flightService.getFlightById(flightId);
-        if(flight == null){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(flight.getAvailableSeats());
+        return ResponseEntity.ok(flight.getAvailableSeats());
     }
+
     @PutMapping("/{flightId}/decrement")
     public ResponseEntity<?> decrementSeats(@PathVariable Long flightId, @RequestParam int count) {
         Flight flight = flightService.getFlightById(flightId);
-        if(flight == null){
-            return  ResponseEntity.notFound().build();
+        if (flight == null) {
+            return ResponseEntity.ok("Flight not found.");
         }
 
-        if(flight.getAvailableSeats() <= count){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not enough available seats");
+        if (count < 0) {
+            return ResponseEntity.ok("Count must be greater than zero.");
         }
 
-        if(count < 0){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Count must be greater than zero.");
+        if (flight.getAvailableSeats() < count) {
+            return ResponseEntity.ok("Not enough available seats.");
         }
 
         flight.setAvailableSeats(flight.getAvailableSeats() - count);
@@ -90,22 +94,10 @@ public class FlightController {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @DeleteMapping("/{id}")
-    public void deleteFlight(@PathVariable Long id) {
+    public ResponseEntity<String> deleteFlight(@PathVariable Long id) {
         flightService.deleteFlight(id);
+        return ResponseEntity.ok("Flight deleted successfully.");
     }
+
 }
