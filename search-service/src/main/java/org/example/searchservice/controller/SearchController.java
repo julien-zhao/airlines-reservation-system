@@ -3,6 +3,7 @@ package org.example.searchservice.controller;
 import com.example.flightservice.entity.Flight;
 import org.example.searchservice.client.FlightServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,12 @@ public class SearchController {
 
     @Autowired
     private FlightServiceClient flightServiceClient;
+
+
+    @GetMapping
+    public List<Flight> searchAllFlights() {
+        return flightServiceClient.getFlights();
+    }
 
     @GetMapping("/flightsByOrigin")
     public List<Flight> searchFlightsByOrigin(@RequestParam String origin) {

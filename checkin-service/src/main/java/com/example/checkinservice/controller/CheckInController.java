@@ -1,37 +1,65 @@
 package com.example.checkinservice.controller;
 
-import com.example.checkinservice.model.CheckIn;
-import com.example.checkinservice.repository.CheckInRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.checkinservice.dto.CheckInRequest;
+import com.example.checkinservice.dto.CheckInResponse;
+import com.example.checkinservice.entity.CheckIn;
+import com.example.checkinservice.service.CheckInService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/checkin")
+@RequestMapping("/api/checkin")
 public class CheckInController {
 
-    @Autowired
-    private CheckInRepository repository;
+    private final CheckInService checkInService;
 
-    // 创建新的值机记录
+    public CheckInController(CheckInService checkInService) {
+        this.checkInService = checkInService;
+    }
+
+
     @PostMapping
-    public CheckIn create(@RequestBody CheckIn checkIn) {
-        checkIn.setCheckedInAt(LocalDateTime.now()); // 自动设置值机时间
-        return repository.save(checkIn);
+    public ResponseEntity<CheckInResponse> checkInPassengers(@RequestBody CheckInRequest request) {
+        CheckInResponse result = checkInService.processGroupCheckIn(request);
+        return ResponseEntity.ok(result);
     }
 
-    // 获取所有值机记录
     @GetMapping
-    public List<CheckIn> getAll() {
-        return repository.findAll();
+    public ResponseEntity<List<CheckIn>> getAllCheckIns() {
+        List<CheckIn> allCheckIns = checkInService.getAllCheckIns();
+        return ResponseEntity.ok(allCheckIns);
     }
 
-    // 根据 bookingId 查询是否值机
-    @GetMapping("/{bookingId}")
-    public Optional<CheckIn> getByBookingId(@PathVariable Long bookingId) {
-        return repository.findByBookingId(bookingId);
+    @GetMapping("/{checkInId}")
+    public ResponseEntity<?> getCheckInById(@PathVariable Long checkInId) {
+        return checkInService.getCheckInById(checkInId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
+
+
+    @GetMapping("/flight/{flightId}")
+    public ResponseEntity<List<CheckIn>> getCheckInsByFlight(@PathVariable Long flightId) {
+        return ResponseEntity.ok(checkInService.getCheckInsByFlightId(flightId));
+    }
+
+
+
+    @GetMapping("/responses")
+    public ResponseEntity<List<CheckInResponse>> getAllCheckInsResponse() {
+        List<CheckInResponse> checkIns = checkInService.getAllCheckInResponses();
+        return ResponseEntity.ok(checkIns);
+    }
+
+
+    @GetMapping("/response/{id}")
+    public ResponseEntity<CheckInResponse> getCheckInResponseById(@PathVariable Long id) {
+        return checkInService.getCheckInResponseById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
 }

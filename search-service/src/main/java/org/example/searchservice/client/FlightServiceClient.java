@@ -11,6 +11,9 @@ import java.util.List;
 @FeignClient(name = "flight-service", path = "/api/flights")
 public interface FlightServiceClient {
 
+    @GetMapping
+    List<Flight> getFlights();
+
     @GetMapping("/searchByOrigin")
     List<Flight> getFlightsByOrigin(@RequestParam("origin") String origin);
 

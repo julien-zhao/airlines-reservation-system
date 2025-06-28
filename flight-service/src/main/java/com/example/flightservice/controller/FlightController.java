@@ -71,6 +71,7 @@ public class FlightController {
         return ResponseEntity.ok(flight.getAvailableSeats());
     }
 
+
     @PutMapping("/{flightId}/decrement")
     public ResponseEntity<?> decrementSeats(@PathVariable Long flightId, @RequestParam int count) {
         Flight flight = flightService.getFlightById(flightId);
@@ -90,6 +91,17 @@ public class FlightController {
         flightService.saveFlight(flight);
         return ResponseEntity.ok().build();
     }
+
+
+    @GetMapping("/{id}/capacity")
+    public ResponseEntity<?> getFlightCapacity(@PathVariable Long id) {
+        Flight flight = flightService.getFlightById(id);
+        if (flight == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Flight not found");
+        }
+        return ResponseEntity.ok(flight.getCapacity());
+    }
+
 
 
 

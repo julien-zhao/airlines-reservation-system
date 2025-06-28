@@ -2,6 +2,7 @@ package com.example.bookingservice.service;
 
 import com.example.bookingservice.client.ClientService;
 import com.example.bookingservice.client.FlightServiceClient;
+import com.example.bookingservice.client.NotificationServiceClient;
 import com.example.bookingservice.client.PaymentServiceClient;
 import com.example.bookingservice.entity.Booking;
 import com.example.bookingservice.entity.Passenger;
@@ -22,14 +23,16 @@ public class BookingService {
     private final FlightServiceClient flightServiceClient;
     private final PaymentServiceClient paymentServiceClient;
     private final ClientService clientService;
-    public BookingService(BookingRepository bookingRepository, FlightServiceClient flightServiceClient, PaymentServiceClient paymentServiceClient, ClientService clientService) {
+    private final NotificationServiceClient notificationServiceClient;
+    public BookingService(BookingRepository bookingRepository, FlightServiceClient flightServiceClient, PaymentServiceClient paymentServiceClient, ClientService clientService, NotificationServiceClient notificationServiceClient) {
         this.bookingRepository = bookingRepository;
         this.flightServiceClient = flightServiceClient;
         this.paymentServiceClient = paymentServiceClient;
         this.clientService = clientService;
+        this.notificationServiceClient = notificationServiceClient;
     }
 
-    public Booking getBooking(Long id) {
+    public Booking getBookingById(Long id) {
         return bookingRepository.findById(id).orElse(null);
     }
 
@@ -52,7 +55,7 @@ public class BookingService {
         paymentServiceClient.save(payment);
 
         int available = flightServiceClient.getAvailableSeats(flightId);
-        int passengerCount = passengers.size()+1;
+        int passengerCount = passengers.size();
         if (available < passengerCount) {
             throw new RuntimeException("Not enough seats available");
         }
@@ -62,6 +65,17 @@ public class BookingService {
         Booking booking = new Booking();
         booking.setFlightId(flightId);
         booking.setUserId(userId);
+
+        booking.setAirline(flightServiceClient.getFlight(flightId).getAirline());
+        booking.setAddress(flightServiceClient.getFlight(flightId).getAddress());
+        booking.setTerminal(flightServiceClient.getFlight(flightId).getTerminal());
+        booking.setFlightNumber(flightServiceClient.getFlight(flightId).getFlightNumber());
+        booking.setOrigin(flightServiceClient.getFlight(flightId).getOrigin());
+        booking.setDestination(flightServiceClient.getFlight(flightId).getDestination());
+        booking.setDepartureTime(flightServiceClient.getFlight(flightId).getDepartureTime());
+        booking.setArrivalTime(flightServiceClient.getFlight(flightId).getArrivalTime());
+
+
         booking.setPassengerCount(passengerCount);
         booking.setBookingDate(LocalDateTime.now());
 
@@ -73,9 +87,17 @@ public class BookingService {
 
 
         booking.setConfirmed(true);
+
+
+        String clientEmail = clientService.getClientById(booking.getUserId()).getEmail();
+
+        notificationServiceClient.sendEmail(clientEmail,
+                "Confirmation Réservation",
+                "Votre réservation a été effectué avec succès.");
+
+
         return bookingRepository.save(booking);
     }
-
 
 
 

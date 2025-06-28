@@ -1,5 +1,6 @@
 package com.example.clientservice.service;
 
+import com.example.clientservice.client.NotificationServiceClient;
 import com.example.clientservice.entity.Client;
 import com.example.clientservice.repository.ClientRepository;
 import org.springframework.stereotype.Service;
@@ -9,8 +10,12 @@ import java.util.List;
 @Service
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    private final NotificationServiceClient notificationServiceClient;
+
+    public ClientServiceImpl(ClientRepository clientRepository, NotificationServiceClient notificationServiceClient) {
+
         this.clientRepository = clientRepository;
+        this.notificationServiceClient = notificationServiceClient;
     }
 
     @Override
@@ -20,6 +25,13 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client saveClient(Client client){
+        String clientEmail = client.getEmail();
+
+        notificationServiceClient.sendEmail(clientEmail,
+                "Confirmation Création de compte",
+                "Votre création de compte a été effectué avec succès.");
+
+
         return clientRepository.save(client);
     };
 

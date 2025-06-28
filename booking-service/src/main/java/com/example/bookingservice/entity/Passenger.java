@@ -20,12 +20,13 @@ public class Passenger {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "passport_number")
+    @Column(name = "passport_number", unique = true)
     private String passportNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id", nullable = false)
     @JsonBackReference
     private Booking booking;
+
 
 }

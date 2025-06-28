@@ -54,6 +54,9 @@ public class FlightServiceImpl implements FlightService {
         return flightRepository.getFlightsByOriginAndDestination(origin, destination);
     }
 
+
+
+
     @Override
     public List<Flight> searchFlights(String origin, String destination, LocalDateTime departureTime, LocalDateTime arrivalTime) {
         return flightRepository.getFlights(origin, destination, departureTime, arrivalTime);
