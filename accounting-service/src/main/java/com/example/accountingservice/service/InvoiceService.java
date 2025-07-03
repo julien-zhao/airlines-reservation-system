@@ -6,7 +6,7 @@ import com.example.accountingservice.entity.Invoice;
 import java.util.List;
 
 public interface InvoiceService {
-    Invoice generateInvoice(Long paymentId);
+    Invoice saveInvoice(Invoice invoice);
     List<Invoice> getAllInvoices();
     Invoice getInvoiceById(Long id);
 }

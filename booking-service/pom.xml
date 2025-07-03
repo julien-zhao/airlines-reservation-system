@@ -91,6 +91,12 @@
 			<version>1.18.26</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.example</groupId>
+			<artifactId>accounting-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
 
     </dependencies>
 	<dependencyManagement>

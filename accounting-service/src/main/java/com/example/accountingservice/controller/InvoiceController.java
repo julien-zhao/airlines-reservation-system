@@ -16,9 +16,9 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
-    @PostMapping("/generate/{paymentId}")
-    public Invoice generateInvoice(@PathVariable Long paymentId) {
-        return invoiceService.generateInvoice(paymentId);
+    @PostMapping
+    public Invoice saveInvoice(@RequestBody Invoice invoice) {
+        return invoiceService.saveInvoice(invoice);
     }
 
     @GetMapping

@@ -1,7 +1,5 @@
 package com.example.accountingservice.service;
 
-import com.example.accountingservice.client.PaymentServiceClient;
-import com.example.accountingservice.dto.PaymentDTO;
 import com.example.accountingservice.entity.Invoice;
 import com.example.accountingservice.repository.InvoiceRepository;
 import org.springframework.stereotype.Service;
@@ -14,27 +12,18 @@ import java.util.List;
 public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
-    private final PaymentServiceClient paymentServiceClient;
 
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, PaymentServiceClient paymentServiceClient) {
+    public InvoiceServiceImpl(InvoiceRepository invoiceRepository) {
         this.invoiceRepository = invoiceRepository;
-        this.paymentServiceClient = paymentServiceClient;
     }
+
 
     @Override
-    public Invoice generateInvoice(Long paymentId) {
-        PaymentDTO payment = paymentServiceClient.getPaymentById(paymentId);
-
-        Invoice invoice = new Invoice();
-        invoice.setPaymentId(paymentId);
-        invoice.setClientId(payment.getUserId());
-        invoice.setAmount(BigDecimal.valueOf(payment.getPrice()));
+    public Invoice saveInvoice(Invoice invoice) {
         invoice.setIssuedAt(LocalDateTime.now());
-        invoice.setStatus("PAID");
-
+        invoice.setStatus("ISSUED");
         return invoiceRepository.save(invoice);
     }
-
     @Override
     public List<Invoice> getAllInvoices() {
         return invoiceRepository.findAll();
