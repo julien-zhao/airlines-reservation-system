@@ -1,0 +1,131 @@
+version: '3.8'
+
+services:
+  config-server:
+    build:
+      context: ./config-server
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./config-repo:/config-repo
+    environment:
+      - SPRING_PROFILES_ACTIVE=native
+      - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:///config-repo
+
+  eureka-server:
+    build:
+      context: ./eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
+      - EUREKA_CLIENT_FETCH_REGISTRY=false
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    depends_on:
+      - config-server
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    depends_on:
+      - eureka-server
+      - config-server
+
+  accounting-service:
+    build:
+      context: ./accounting-service
+    container_name: accounting-service
+    ports:
+      - "8090:8090"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    depends_on:
+      - eureka-server
+      - config-server
+
+  booking-service:
+    build:
+      context: ./booking-service
+    container_name: booking-service
+    ports:
+      - "8083:8083"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    depends_on:
+      - eureka-server
+      - config-server
+
+  checkin-service:
+    build:
+      context: ./checkin-service
+    container_name: checkin-service
+    ports:
+      - "8084:8084"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    depends_on:
+      - eureka-server
+      - config-server
+
+  client-service:
+    build:
+      context: ./client-service
+    container_name: client-service
+    ports:
+      - "8085:8085"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    depends_on:
+      - eureka-server
+      - config-server
+
+  flight-service:
+    build:
+      context: ./flight-service
+    container_name: flight-service
+    ports:
+      - "8087:8087"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    depends_on:
+      - eureka-server
+      - config-server
+
+  payment-service:
+    build:
+      context: ./payment-service
+    container_name: payment-service
+    ports:
+      - "8088:8088"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    depends_on:
+      - eureka-server
+      - config-server
+
+  notification-service:
+    build:
+      context: ./notification-service
+    container_name: notification-service
+    ports:
+      - "8089:8089"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    depends_on:
+      - eureka-server
+      - config-server
