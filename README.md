@@ -1,92 +1,73 @@
-Airlines Reservation System
+# ✈️ Airlines Reservation System
 
-Un système de réservation de vols développé en Java en suivant les principes de la programmation orientée objet (OOP). Ce projet propose une interface console/desktop (selon implémentation) permettant la gestion des vols, des utilisateurs (passagers et admin), et des réservations.
-📋 Table des matières
+Un système de réservation de vols développé en Java, mettant en œuvre les principes de la programmation orientée objet (POO). Il permet aux passagers de réserver des vols et aux administrateurs de gérer les vols et les utilisateurs.
 
-    Fonctionnalités
+---
 
-    Prérequis
+## 📋 Table des matières
 
-    Installation & lancement
+- [Fonctionnalités](#fonctionnalités)
+- [Prérequis](#prérequis)
+- [Installation & Lancement](#installation--lancement)
+- [Architecture du Projet](#architecture-du-projet)
+- [Utilisation](#utilisation)
+- [Contribution](#contribution)
+- [Licence](#licence)
 
-    Architecture & organisation du projet
+---
 
-    Utilisation
+## 🚀 Fonctionnalités
 
-    Tests (facultatif)
+### Passagers
+- Inscription et connexion
+- Réservation et annulation de vols
+- Consultation des vols réservés
+- Suppression de compte
 
-    Contribution
+### Administrateurs
+- Connexion sécurisée
+- Création, modification et suppression de vols
+- Consultation de tous les passagers
+- Affichage des vols réservés par passager
+- Affichage des passagers par vol
 
-    Licence
+---
 
-Fonctionnalités
+## ✅ Prérequis
 
-    Gestion des utilisateurs
+- Java 15 ou plus
+- Un IDE Java (IntelliJ, Eclipse, VS Code...)
+- Git
 
-        Inscription, connexion, mise à jour et suppression de compte pour les passagers
+---
 
-        Création et gestion des comptes administrateurs
+## ⚙️ Installation & Lancement
 
-    Gestion des vols
+1. **Cloner le projet**
+   ```bash
+   git clone https://github.com/julien-zhao/airlines-reservation-system.git
+   cd airlines-reservation-system
 
-        CRUD des vols (création, lecture, mise à jour, suppression) – réservé aux admins
 
-        Génération aléatoire d’un planning de vols
+2. **Compiler le projet**
 
-    Réservation de vols
+    Avec un IDE : importer le projet et exécuter Main.java
 
-        Réservation de tickets (spécifier le numéro de vol et la quantité)
+    En ligne de commande :
+  ```bash
+    javac src/Main.java
+    java src/Main
+  ```
 
-        Annulation de réservations (restitue les sièges)
-
-        Visualisation de ses vols réservés et de leur statut
-
-    Volet administrateur
-
-        Affichage de tous les passagers
-
-        Visualisation des vols réservés par chaque passager
-
-        Affichage des passagers inscrits sur un vol donné
-
-Prérequis
-
-    ✅ Java 15 ou version supérieure
-
-    🔧 Un IDE compatible Java (IntelliJ IDEA, Eclipse, VS Code...)
-
-    📦 (Optionnel) Maven / Gradle si le projet utilise un build system
-
-Installation & lancement
-
-    Cloner le dépôt
-
-git clone https://github.com/julien-zhao/airlines-reservation-system.git
-cd airlines-reservation-system
-
-Compilation
-
-    Avec Maven : mvn clean package
-
-    Avec Gradle : gradle build
-
-    Ou via votre IDE : importer en tant que projet Java
-
-Lancer l’application
-
-    Via la classe Main.java (point d’entrée) dans votre IDE
-
-    Ou avec la commande shell si un .jar a été généré :
-
-        java -jar target/airlines-reservation-system.jar
-
-Architecture & organisation du projet
-
+3. **Architecture du Projet**
+  ```bash
 src/
-├── controllers/       ← logique métier (auth, réservation, annulation)
-├── models/            ← classes de données : User, Flight, Reservation, Admin
-├── services/          ← services pour CRUD & traitement
-├── utils/             ← classes utilitaires (ex. : génération de planning)
-└── Main.java          ← point d'entrée de l’application
+├── controllers/       → logique métier (authentification, réservation)
+├── models/            → entités : User, Admin, Flight, Reservation
+├── services/          → traitement métier (gestion vols, réservations)
+├── utils/             → outils divers (par ex. générateur de vols)
+└── Main.java          → point d’entrée de l’application
+  ```
 
-Le projet met en œuvre des principes OOP : encapsulation, héritage (Admin ← User), composition, association.
+User est une classe abstraite utilisée par les rôles Passenger et Admin
+Séparation claire des responsabilités avec un découpage en MVC simplifié
