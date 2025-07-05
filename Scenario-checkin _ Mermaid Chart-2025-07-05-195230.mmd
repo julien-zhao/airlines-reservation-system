@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant ClientApp as Client App
+    participant APIGateway as API Gateway
+    participant CheckIn as CheckIn Service
+    participant Booking as Booking Service
+    participant Client as Client Service
+    participant Flight as Flight Service
+    participant Notification as Notification Service
+
+    ClientApp->>APIGateway: request check-in
+    APIGateway->>CheckIn: create check-in
+    CheckIn->>Booking: verify booking
+    CheckIn->>Client: validate client
+    CheckIn->>Flight: get flight details
+    CheckIn->>Notification: send check-in confirmation
+    CheckIn-->>APIGateway: check-in confirmed
+    APIGateway-->>ClientApp: check-in success
