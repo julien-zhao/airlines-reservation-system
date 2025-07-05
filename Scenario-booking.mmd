@@ -1,0 +1,32 @@
+sequenceDiagram
+    participant ClientApp as Client App
+    participant APIGateway as API Gateway
+    participant Client as Client Service
+    participant Flight as Flight Service
+    participant Booking as Booking Service
+    participant Accounting as Accounting Service
+    participant Notification as Notification Service
+    participant Payment as Payment Service
+ 
+    %% Création client
+    ClientApp->>APIGateway: create account request
+    APIGateway->>Client: create client
+    Client-->>APIGateway: client created
+    APIGateway-->>ClientApp: account created
+ 
+    %% Création vol
+    ClientApp->>APIGateway: create flight request
+    APIGateway->>Flight: create flight
+    Flight-->>APIGateway: flight created
+    APIGateway-->>ClientApp: flight created
+ 
+    %% Booking
+    ClientApp->>APIGateway: request booking
+    APIGateway->>Booking: create booking
+    Booking->>Accounting: create invoice
+    Booking->>Client: validate client
+    Booking->>Flight: check flight availability
+    Booking->>Payment: process payment
+    Booking->>Notification: send booking confirmation
+    Booking-->>APIGateway: booking confirmed
+    APIGateway-->>ClientApp: booking success

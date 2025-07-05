@@ -1,0 +1,51 @@
+flowchart TD
+    %% Niveau supérieur
+    Postman[Postman]
+ 
+    subgraph Infra [Infrastructure]
+      direction TB
+      Eureka[Eureka Discovery Server]
+      Config[Spring Cloud Config Server]
+    end
+ 
+    Gateway[Spring Cloud Gateway]
+ 
+    %% Positionnement
+    Postman --> Gateway
+    Gateway --- Infra
+ 
+    %% Microservices
+    subgraph Microservices
+        direction TB
+        Client[Client Service]
+        Notification[Notification Service]
+        Payment[Payment Service]
+        Search[Search Service]
+        Flight[Flight Service]
+        CheckIn[CheckIn Service]
+        Booking[Booking Service]
+        Accounting[Accounting Service]
+    end
+ 
+    Gateway --> Client
+    Gateway --> Payment
+    Gateway --> Search
+    Gateway --> Flight
+    Gateway --> CheckIn
+    Gateway --> Booking
+    Gateway --> Accounting
+    Gateway --> Notification
+ 
+    %% Feign interactions (appels directs entre microservices)
+    Client -- feign --> Notification
+    Payment -- feign --> Client
+    Search -- feign --> Flight
+    CheckIn -- feign --> Booking
+    CheckIn -- feign --> Client
+    CheckIn -- feign --> Flight
+    CheckIn -- feign --> Notification
+    Booking -- feign --> Accounting
+    Booking -- feign --> Client
+    Booking -- feign --> Flight
+    Booking -- feign --> Notification
+    Booking -- feign --> Payment

@@ -1,0 +1,50 @@
+graph TD
+  %% Client
+  subgraph Client
+    ClientApp[Client App]
+  end
+ 
+  ClientApp --> APIGateway[API Gateway]
+ 
+  APIGateway --> ConfigServer[Config Server]
+  APIGateway --> Discovery[Service Discovery]
+ 
+  APIGateway --> Flight[Flight Service]
+  APIGateway --> Search[Search Service]
+  APIGateway --> Booking[Booking Service]
+  APIGateway --> Payment[Payment Service]
+  APIGateway --> CheckIn[CheckIn Service]
+  APIGateway --> ClientS[Client Service]
+  APIGateway --> Accounting[Accounting Service]
+  APIGateway --> Notification[Notification Service]
+ 
+  subgraph Services
+    Flight
+    Search
+    Booking
+    Payment
+    CheckIn
+    ClientS
+    Accounting
+    Notification
+  end
+ 
+  subgraph DBs
+    DB_Flight[(DB Flight)]
+    DB_Search[(DB Search)]
+    DB_Booking[(DB Booking)]
+    DB_Payment[(DB Payment)]
+    DB_CheckIn[(DB CheckIn)]
+    DB_Client[(DB Client)]
+    DB_Accounting[(DB Accounting)]
+    DB_Notification[(DB Notification)]
+  end
+ 
+  Flight      --> DB_Flight
+  Search      --> DB_Search
+  Booking     --> DB_Booking
+  Payment     --> DB_Payment
+  CheckIn     --> DB_CheckIn
+  ClientS     --> DB_Client
+  Accounting  --> DB_Accounting
+  Notification--> DB_Notification
