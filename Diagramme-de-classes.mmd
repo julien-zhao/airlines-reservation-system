@@ -1,0 +1,125 @@
+classDiagram
+    class Invoice {
+        +Long id
+        +Long bookingId
+        +Long userId
+        +Long flightId
+        +String airline
+        +String address
+        +String terminal
+        +String flightNumber
+        +String origin
+        +String destination
+        +LocalDateTime departureTime
+        +LocalDateTime arrivalTime
+        +int passengerCount
+        +LocalDateTime bookingDate
+        +int amount
+        +LocalDateTime issuedAt
+        +String status
+    }
+ 
+    class Booking {
+        +Long id
+        +Long flightId
+        +Long userId
+        +LocalDateTime bookingDate
+        +String airline
+        +String address
+        +String terminal
+        +String flightNumber
+        +String origin
+        +String destination
+        +LocalDateTime departureTime
+        +LocalDateTime arrivalTime
+        +int passengerCount
+        +boolean confirmed
+    }
+ 
+    class Passenger {
+        +Long id
+        +String firstName
+        +String lastName
+        +String passportNumber
+    }
+ 
+    class CheckIn {
+        +Long id
+        +Long bookingId
+        +String airline
+        +String address
+        +String terminal
+        +Long flightId
+        +String origin
+        +String destination
+        +LocalDateTime departureTime
+        +LocalDateTime arrivalTime
+        +Boolean isConfirmed
+    }
+ 
+    class Client {
+        +Long id
+        +String lastName
+        +String firstName
+        +String email
+        +String phoneNumber
+    }
+ 
+    class Flight {
+        +Long id
+        +String airline
+        +String address
+        +String terminal
+        +String flightNumber
+        +String origin
+        +String destination
+        +LocalDateTime departureTime
+        +LocalDateTime arrivalTime
+        +int capacity
+        +int availableSeats
+        +int price
+        +boolean flightFull
+    }
+ 
+    class Layover {
+        +Long id
+        +String city
+    }
+ 
+    class Payment {
+        +Long id
+        +Long userId
+        +int price
+        +String cardNumber
+        +String cardHolderName
+        +String expiryDate
+        +String cvv
+    }
+ 
+    class SearchService {
+        +List<Flight> flightsByOriginAndDestination(String origin, String destination)
+    }
+ 
+    class NotificationService {
+        +sendEmail()
+    }
+ 
+    %% Associations entités
+    Booking "1" o-- "*" Passenger : contains
+    Flight "1" o-- "*" Layover : has
+    Passenger --> Booking : belongs to
+    Layover --> Flight : belongs to
+ 
+    %% Dépendances Feign (utilisation services)
+    Client ..> NotificationService : feign
+    Payment ..> Client : feign
+    SearchService ..> Flight : feign
+    CheckIn ..> Booking : feign
+    CheckIn ..> Client : feign
+    CheckIn ..> Flight : feign
+    CheckIn ..> NotificationService : feign
+    Booking ..> Invoice : feign
+    Booking ..> Client : feign
+    Booking ..> Flight : feign
+    Booking ..> NotificationService : feign
+    Booking ..> Payment : feign
